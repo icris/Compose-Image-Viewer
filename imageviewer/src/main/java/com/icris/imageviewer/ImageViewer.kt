@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
@@ -74,7 +75,7 @@ fun ImageViewer(
                     .background(Color.Black)
             )
             HorizontalPager(state = pagerState) {
-                ImageWrapper(animDuration, model, it, positionTracingState, fullWidth, onBack)
+                ImageItem(animDuration, model, it, positionTracingState, fullWidth, onBack)
             }
 
             Text(
@@ -88,7 +89,7 @@ fun ImageViewer(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AnimatedVisibilityScope.ImageWrapper(
+private fun AnimatedVisibilityScope.ImageItem(
     animDuration: Int,
     model: (Int) -> Any?,
     i: Int,
@@ -107,13 +108,13 @@ fun AnimatedVisibilityScope.ImageWrapper(
                     + shrinkOut(tween(animDuration), shrinkTowards = Alignment.Center) { positionTracingState.sizeFor(i) }
         )
     ) {
-        ImageItem(model, i, onBack)
+        AsyncImage(model(i), null, Modifier.fillMaxSize().zoom(onBack), contentScale = ContentScale.FillWidth)
     }
 }
 
+
 @OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun ImageItem(model: (Int) -> Any?, i: Int, onBack: () -> Unit) {
+fun Modifier.zoom(onTap: () -> Unit) = composed {
     var imgSize by remember { mutableStateOf(Size.Unspecified) }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -126,44 +127,36 @@ fun ImageItem(model: (Int) -> Any?, i: Int, onBack: () -> Unit) {
     val realScale by animateFloatAsState(targetValue = scale, label = "scale")
     val realRotation by animateFloatAsState(targetValue = rotation, label = "rotation")
     val realOffset by animateOffsetAsState(targetValue = offset, label = "offset")
-    AsyncImage(
-        model(i),
-        null,
-        modifier = Modifier
-            .fillMaxSize()
-            .transformable(transformableState, { scale > 1f }, true)
-            .graphicsLayer {
-                imgSize = size
-                scaleX = realScale
-                scaleY = realScale
-                translationX = realOffset.x
-                translationY = realOffset.y
-                rotationZ = realRotation
-            }
-            .pointerInput(i) {
-                detectTapGestures(
-                    onDoubleTap = { point ->
-                        val realPoint = offset + imgSize.center - point
-                        if (scale <= 1.5f) {
-                            scale = 2.6f
-                            offset = calOffset(imgSize, scale, realPoint * scale)
-                        } else {
-                            scale = 1f
-                            offset = Offset.Zero
-                            rotation = 0f
-                        }
-                    },
-                    onTap = {
-                        scale = 1f
-                        offset = Offset.Zero
-                        rotation = 0f
-                        onBack()
-                    }
-                )
+    transformable(transformableState, { scale > 1f }, true)
+    .graphicsLayer {
+        imgSize = size
+        scaleX = realScale
+        scaleY = realScale
+        translationX = realOffset.x
+        translationY = realOffset.y
+        rotationZ = realRotation
+    }
+    .pointerInput("tapGestures") {
+        detectTapGestures(
+            onDoubleTap = { point ->
+                val realPoint = offset + imgSize.center - point
+                if (scale <= 1.5f) {
+                    scale = 2.6f
+                    offset = calOffset(imgSize, scale, realPoint * scale)
+                } else {
+                    scale = 1f
+                    offset = Offset.Zero
+                    rotation = 0f
+                }
             },
-        contentScale = ContentScale.FillWidth
-    )
-
+            onTap = {
+                scale = 1f
+                offset = Offset.Zero
+                rotation = 0f
+                onTap()
+            }
+        )
+    }
 }
 
 

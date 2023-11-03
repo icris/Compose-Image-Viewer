@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 fun AllDemo() {
     val scope = rememberCoroutineScope()
     var showImageViewer by remember { mutableStateOf(false) }
-    val pagerState = rememberPagerState { images.size*3 }
+    val pagerState = rememberPagerState { images.size * 3 }
     val allLazyListState = rememberLazyListState()
     val lazyListState = rememberLazyListState()
     val lazyGridState = rememberLazyGridState()
@@ -48,9 +48,9 @@ fun AllDemo() {
         val i = it % images.size
         allLazyListState.scrollToItem(index)
         when (index) {
-            0 -> { lazyListState.scrollToItem(i) }
-            1 -> { lazyGridState.scrollToItem(i) }
-            2 -> { lazyStaggeredGridState.scrollToItem(i) }
+            0 -> lazyListState.scrollToItem(i)
+            1 -> lazyGridState.scrollToItem(i)
+            2 -> lazyStaggeredGridState.scrollToItem(i)
             else -> {}
         }
     }
@@ -78,9 +78,13 @@ fun AllDemo() {
 
             }
             item {
-                LazyVerticalGrid(GridCells.Fixed(3), Modifier.fillParentMaxSize(), state = lazyGridState) {
+                LazyVerticalGrid(
+                    GridCells.Fixed(3),
+                    Modifier.fillParentMaxSize(),
+                    state = lazyGridState
+                ) {
                     items(images.size) {
-                        val i = it+ images.size
+                        val i = it + images.size
                         AsyncImage(
                             model = images[it],
                             contentDescription = null,
@@ -90,7 +94,7 @@ fun AllDemo() {
                                     showImageViewer = true
                                 }
                                 .fillMaxWidth()
-                                .aspectRatio(16f/9f)
+                                .aspectRatio(16f / 9f)
                                 .positionTracing(i, positionTracingState),
                             contentScale = ContentScale.FillWidth
                         )
@@ -98,9 +102,13 @@ fun AllDemo() {
                 }
             }
             item {
-                LazyVerticalStaggeredGrid(StaggeredGridCells.Fixed(3), Modifier.fillParentMaxSize(), state = lazyStaggeredGridState) {
+                LazyVerticalStaggeredGrid(
+                    StaggeredGridCells.Fixed(3),
+                    Modifier.fillParentMaxSize(),
+                    state = lazyStaggeredGridState
+                ) {
                     items(images.size) {
-                        val i = it+ images.size*2
+                        val i = it + images.size * 2
                         AsyncImage(
                             model = images[it],
                             contentDescription = null,
@@ -121,11 +129,10 @@ fun AllDemo() {
 
         ImageViewer(
             visible = showImageViewer,
-            pagerState ,
-            positionTracingState ,
-            model = { images[it% images.size]},
-            onBack = { showImageViewer=false },
-            animDuration = 3000
+            pagerState,
+            positionTracingState,
+            model = { images[it % images.size] },
+            onBack = { showImageViewer = false }
         )
     }
 }

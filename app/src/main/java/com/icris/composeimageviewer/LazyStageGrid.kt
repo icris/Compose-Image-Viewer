@@ -51,11 +51,10 @@ fun LazyStaggeredGridDemo() {
         }
         ImageViewer(
             visible = showImageViewer,
-            pagerState ,
-            positionTracingState ,
-            model = { images[it]},
-            onBack = { showImageViewer=false },
-            animDuration = 3000
+            pagerState,
+            positionTracingState,
+            model = { images[it] },
+            onBack = { showImageViewer = false }
         )
     }
 }

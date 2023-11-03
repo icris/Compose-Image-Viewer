@@ -4,6 +4,7 @@ compose-destinations = "1.9.53"
 kotlin = "1.9.0"
 ksp = "1.9.0-1.0.13"
 hilt = '2.44'
+compose-image-viewer = '1.0.0'
 
 core-ktx = "1.12.0"
 junit = "4.13.2"
@@ -114,6 +115,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 ezviz-sdk = { group = "io.github.ezviz-open", name = "ezviz-sdk", version.ref = 'ezviz' }
 gson = { group = 'com.google.code.gson', name = 'gson', version.ref = 'gson' }
+
+imageviewer = { group = 'com.gitee.icris', name = 'compose-image-viewer', version.ref = 'compose-image-viewer'}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

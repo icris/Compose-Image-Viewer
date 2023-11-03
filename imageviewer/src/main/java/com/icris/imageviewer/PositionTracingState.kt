@@ -26,8 +26,7 @@ class PositionTracingState {
     private fun isVisible(i: Int) = visibleItems[i]?.isEmpty == false
     internal fun sizeFor(i: Int) = visibleItems[i]?.roundToIntRect()?.size ?: IntSize.Zero
     internal fun centerFor(i: Int): IntOffset = visibleItems[i]?.center?.round() ?: IntOffset.Zero
-    internal fun calcScale(i: Int, fullWidth: Int): Float =
-        visibleItems[i]?.let { it.width / fullWidth } ?: .5f
+    internal fun calcScale(i: Int, fullWidth: Int): Float = visibleItems[i]?.let { it.width / fullWidth } ?: .5f
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable fun Sync(pagerState: PagerState, lazyGridState: LazyGridState) {

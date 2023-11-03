@@ -55,13 +55,17 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.compose.bom))
-    api(libs.bundles.base)
     implementation(project(":imageviewer"))
-
-//    implementation("com.gitee.icris.compose-image-viewer:imageviewer:master-SNAPSHOT")
+//    implementation(libs.imageviewer)
+//    implementation("com.gitee.icris:compose-image-viewer:1.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
+
+
+
+
+
+

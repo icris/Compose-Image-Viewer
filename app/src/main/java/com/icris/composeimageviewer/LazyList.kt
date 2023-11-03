@@ -52,10 +52,10 @@ fun LazyListDemo() {
         }
         ImageViewer(
             visible = showImageViewer,
-            pagerState ,
-            positionTracingState ,
-            model = { images[it]},
-            onBack = { showImageViewer=false }
+            pagerState,
+            positionTracingState,
+            model = { images[it] },
+            onBack = { showImageViewer = false }
         )
     }
 }

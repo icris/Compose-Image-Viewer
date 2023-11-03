@@ -42,16 +42,10 @@ android {
 
 dependencies {
     implementation(platform(libs.compose.bom))
-//    api(libs.bundles.base)
-
     api(libs.core.ktx)
     api(libs.material3)
     api(libs.activity.compose)
     api(libs.bundles.coil)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }
 
 val GROUP_ID = "com.gitee.icris"
