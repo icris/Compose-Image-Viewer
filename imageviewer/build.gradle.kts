@@ -26,11 +26,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -54,8 +54,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 }
 
-val GROUP_ID = "com.github.bqliang"
-val ARTIFACT_ID = "jitpack-lib-sample"
+val GROUP_ID = "com.gitee.icris"
+val ARTIFACT_ID = "compose-image-viewer"
 val VERSION = latestGitTag().ifEmpty { "1.0.0-SNAPSHOT" }
 
 fun latestGitTag(): String {
