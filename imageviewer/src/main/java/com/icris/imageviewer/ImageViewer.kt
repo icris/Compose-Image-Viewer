@@ -97,19 +97,19 @@ private fun AnimatedVisibilityScope.ImageItem(
     fullWidth: Int,
     onBack: () -> Unit
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .animateEnterExit(
-            enter = slideIn(tween(animDuration)) { positionTracingState.centerFor(i) - it.center }
-                    + scaleIn(tween(animDuration), initialScale = positionTracingState.calcScale(i, fullWidth))
-                    + expandIn(tween(animDuration), expandFrom = Alignment.Center) { positionTracingState.sizeFor(i) },
-            exit = slideOut(tween(animDuration)) { positionTracingState.centerFor(i) - it.center }
-                    + scaleOut(tween(animDuration), targetScale = positionTracingState.calcScale(i, fullWidth))
-                    + shrinkOut(tween(animDuration), shrinkTowards = Alignment.Center) { positionTracingState.sizeFor(i) }
-        )
-    ) {
-        AsyncImage(model(i), null, Modifier.fillMaxSize().zoom(onBack), contentScale = ContentScale.FillWidth)
-    }
+    AsyncImage(
+        model = model(i),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize()
+            .animateEnterExit(
+                enter = slideIn(tween(animDuration)) { positionTracingState.centerFor(i) - it.center }
+                        + scaleIn(tween(animDuration), initialScale = positionTracingState.calcScale(i, fullWidth))
+                        + expandIn(tween(animDuration), expandFrom = Alignment.Center) { positionTracingState.sizeFor(i) },
+                exit = slideOut(tween(animDuration)) { positionTracingState.centerFor(i) - it.center }
+                        + scaleOut(tween(animDuration), targetScale = positionTracingState.calcScale(i, fullWidth))
+                        + shrinkOut(tween(animDuration), shrinkTowards = Alignment.Center) { positionTracingState.sizeFor(i) }
+            )
+            .zoom(onBack), contentScale = ContentScale.FillWidth)
 }
 
 

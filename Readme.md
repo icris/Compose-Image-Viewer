@@ -1,7 +1,8 @@
-[![](https://jitpack.io/v/com.gitee.icris/compose-image-viewer.svg)](https://jitpack.io/#com.gitee.icris/compose-image-viewer)
-
 ComposeImageViewer
 ==================
+
+[![](https://jitpack.io/v/com.gitee.icris/compose-image-viewer.svg)](https://jitpack.io/#com.gitee.icris/compose-image-viewer)
+
 ---
 ## 描述
 Compose 图片浏览器，支持滑动切换、双指放大、双击放大，支持列表页到大图切换动画
