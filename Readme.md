@@ -9,24 +9,16 @@ Compose 图片浏览器，支持滑动切换、双指放大、双击放大，支
 
 ---
 ## 使用
-<!-- 
-- 用 Box 包裹列表与大图
-- 创建必要的状态：`pagerState`、`lazyGridState`、`positionTracingState`
-- 同步 `pagerState` 与 `lazyGridState`
-- 在列表图片上添加 `positionTracing` 跟踪图片位置
-- 点击显示大图时让 `pagerState` 滚动到点击图片位置 -->
 ```kotlin
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyGridDemo() {
     val scope = rememberCoroutineScope()
-    var showImageViewer by remember { mutableStateOf(false) }
-    val pagerState = rememberPagerState { images.size }
     val lazyGridState = rememberLazyGridState()
-    val positionTracingState = rememberPositionTracingState()
-    positionTracingState.Sync(pagerState) { lazyGridState.scrollToItem(it) }
-
+    val imageViewerState = rememberImageViewerState(
+        model = { images[it] },
+        count = { images.size },
+        scrollToItem = { lazyGridState.scrollToItem(it) }
+    )
     Box {
         LazyVerticalGrid(GridCells.Fixed(3), state = lazyGridState) {
             items(images.size) {
@@ -35,24 +27,16 @@ fun LazyGridDemo() {
                     contentDescription = null,
                     Modifier
                         .clickable {
-                            scope.launch { pagerState.scrollToPage(it) }
-                            showImageViewer = true
+                            scope.launch { imageViewerState.onClick(it) }
                         }
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f)
-                        .positionTracing(it, positionTracingState),
+                        .positionTracing(it, imageViewerState),
                     contentScale = ContentScale.FillWidth
                 )
             }
         }
-        ImageViewer(
-            visible = showImageViewer,
-            pagerState,
-            positionTracingState,
-            model = { images[it] },
-            onBack = { showImageViewer = false },
-            animDuration = 3000
-        )
+        ImageViewer(imageViewerState, 3000)
     }
 }
 ```
@@ -74,13 +58,13 @@ dependencyResolutionManagement {
 ```
 #### 添加依赖
 ```kotlin
-implementation("com.gitee.icris:compose-image-viewer:1.0.0")
+implementation("com.gitee.icris:compose-image-viewer:1.0.1")
 ```
 
 #### libs.versions.toml
 ```toml
 [versions]
-compose-image-viewer = '1.0.0'
+compose-image-viewer = '1.0.1'
 [libraries]
 imageviewer = { group = 'com.gitee.icris', name = 'compose-image-viewer', version.ref = 'compose-image-viewer'}
 

@@ -25,7 +25,6 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,16 +49,10 @@ import coil.compose.AsyncImage
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun ImageViewer(
-    visible: Boolean,
-    pagerState: PagerState,
-    positionTracingState: PositionTracingState,
-    model: (Int) -> Any?,
-    onBack: () -> Unit,
-    animDuration: Int = 200
-) {
+fun ImageViewer(state: ImageViewerState, animDuration: Int = 200) {
+    var visible by state.bigPictureVisible
     var fullWidth by remember { mutableIntStateOf(0) }
-    BackHandler(enabled = visible, onBack)
+    BackHandler(visible) { visible = false }
 
     AnimatedVisibility(
         visible = visible,
@@ -74,12 +67,12 @@ fun ImageViewer(
                     .animateEnterExit(fadeIn(), fadeOut())
                     .background(Color.Black)
             )
-            HorizontalPager(state = pagerState) {
-                ImageItem(animDuration, model, it, positionTracingState, fullWidth, onBack)
+            HorizontalPager(state = state.pagerState) {
+                ImageItem(animDuration, state.model.value, it, state.positionTracingState, fullWidth, onBack = { visible = false })
             }
 
             Text(
-                text = "${pagerState.currentPage + 1}/${pagerState.pageCount}",
+                text = "${state.pagerState.currentPage + 1}/${state.pagerState.pageCount}",
                 Modifier.align(Alignment.BottomCenter).animateEnterExit(fadeIn(), fadeOut()),
                 color = Color.White
             )
@@ -100,7 +93,8 @@ private fun AnimatedVisibilityScope.ImageItem(
     AsyncImage(
         model = model(i),
         contentDescription = null,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .animateEnterExit(
                 enter = slideIn(tween(animDuration)) { positionTracingState.centerFor(i) - it.center }
                         + scaleIn(tween(animDuration), initialScale = positionTracingState.calcScale(i, fullWidth))
@@ -128,35 +122,35 @@ fun Modifier.zoom(onTap: () -> Unit) = composed {
     val realRotation by animateFloatAsState(targetValue = rotation, label = "rotation")
     val realOffset by animateOffsetAsState(targetValue = offset, label = "offset")
     transformable(transformableState, { scale > 1f }, true)
-    .graphicsLayer {
-        imgSize = size
-        scaleX = realScale
-        scaleY = realScale
-        translationX = realOffset.x
-        translationY = realOffset.y
-        rotationZ = realRotation
-    }
-    .pointerInput("tapGestures") {
-        detectTapGestures(
-            onDoubleTap = { point ->
-                val realPoint = offset + imgSize.center - point
-                if (scale <= 1.5f) {
-                    scale = 2.6f
-                    offset = calOffset(imgSize, scale, realPoint * scale)
-                } else {
+        .graphicsLayer {
+            imgSize = size
+            scaleX = realScale
+            scaleY = realScale
+            translationX = realOffset.x
+            translationY = realOffset.y
+            rotationZ = realRotation
+        }
+        .pointerInput("tapGestures") {
+            detectTapGestures(
+                onDoubleTap = { point ->
+                    val realPoint = offset + imgSize.center - point
+                    if (scale <= 1.5f) {
+                        scale = 2.6f
+                        offset = calOffset(imgSize, scale, realPoint * scale)
+                    } else {
+                        scale = 1f
+                        offset = Offset.Zero
+                        rotation = 0f
+                    }
+                },
+                onTap = {
                     scale = 1f
                     offset = Offset.Zero
                     rotation = 0f
+                    onTap()
                 }
-            },
-            onTap = {
-                scale = 1f
-                offset = Offset.Zero
-                rotation = 0f
-                onTap()
-            }
-        )
-    }
+            )
+        }
 }
 
 
