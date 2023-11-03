@@ -59,6 +59,8 @@ dependencies {
     api(libs.bundles.base)
     implementation(project(":imageviewer"))
 
+//    implementation("com.gitee.icris.compose-image-viewer:imageviewer:master-SNAPSHOT")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
