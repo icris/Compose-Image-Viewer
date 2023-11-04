@@ -57,7 +57,7 @@ android {
 dependencies {
     implementation(project(":imageviewer"))
 //    implementation(libs.imageviewer)
-//    implementation("com.gitee.icris:compose-image-viewer:1.0.0")
+//    implementation("com.gitee.icris:compose-image-viewer:1.0.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

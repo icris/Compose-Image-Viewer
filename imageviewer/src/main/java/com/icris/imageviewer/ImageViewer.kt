@@ -109,13 +109,13 @@ private fun AnimatedVisibilityScope.ImageItem(
 
 @OptIn(ExperimentalFoundationApi::class)
 fun Modifier.zoom(onTap: () -> Unit) = composed {
-    var imgSize by remember { mutableStateOf(Size.Unspecified) }
+    var fullSize by remember { mutableStateOf(Size.Unspecified) }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     var rotation by remember { mutableFloatStateOf(0f) }
     val transformableState = rememberTransformableState { zoomChange, panChange, rotationChange ->
         scale = (scale * zoomChange).coerceIn(1f, 5f)
-        offset = calOffset(imgSize, scale, offset + panChange)
+        offset = calOffset(fullSize, scale, offset + panChange)
         rotation += rotationChange
     }
     val realScale by animateFloatAsState(targetValue = scale, label = "scale")
@@ -123,7 +123,7 @@ fun Modifier.zoom(onTap: () -> Unit) = composed {
     val realOffset by animateOffsetAsState(targetValue = offset, label = "offset")
     transformable(transformableState, { scale > 1f }, true)
         .graphicsLayer {
-            imgSize = size
+            fullSize = size
             scaleX = realScale
             scaleY = realScale
             translationX = realOffset.x
@@ -133,10 +133,10 @@ fun Modifier.zoom(onTap: () -> Unit) = composed {
         .pointerInput("tapGestures") {
             detectTapGestures(
                 onDoubleTap = { point ->
-                    val realPoint = offset + imgSize.center - point
+                    val realPoint = offset + fullSize.center - point
                     if (scale <= 1.5f) {
                         scale = 2.6f
-                        offset = calOffset(imgSize, scale, realPoint * scale)
+                        offset = calOffset(fullSize, scale, realPoint * scale)
                     } else {
                         scale = 1f
                         offset = Offset.Zero
@@ -153,10 +153,9 @@ fun Modifier.zoom(onTap: () -> Unit) = composed {
         }
 }
 
-
-private fun calOffset(imgSize: Size, scale: Float, offsetChanged: Offset): Offset {
-    if (imgSize == Size.Unspecified) return Offset.Zero
-    val px = imgSize.width * (scale - 1f) / 2f
-    val py = imgSize.height * (scale - 1f) / 2f
-    return Offset(offsetChanged.x.coerceIn(-px, px), offsetChanged.y.coerceIn(-py, py))
+private fun calOffset(size: Size, scale: Float, offset: Offset): Offset {
+    if (size == Size.Unspecified) return Offset.Zero
+    val px = size.width * (scale - 1f) / 2f
+    val py = size.height * (scale - 1f) / 2f
+    return Offset(offset.x.coerceIn(-px, px), offset.y.coerceIn(-py, py))
 }
