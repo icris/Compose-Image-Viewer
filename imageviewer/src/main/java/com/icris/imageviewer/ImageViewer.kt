@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.tween
@@ -39,6 +40,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
+import androidx.compose.ui.geometry.isUnspecified
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -49,7 +51,7 @@ import coil.compose.AsyncImage
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun ImageViewer(state: ImageViewerState, animDuration: Int = 200) {
+fun ImageViewer(state: ImageViewerState, animDuration: Int = DefaultDurationMillis) {
     var visible by state.bigPictureVisible
     var fullWidth by remember { mutableIntStateOf(0) }
     BackHandler(visible) { visible = false }
@@ -154,7 +156,7 @@ fun Modifier.zoom(onTap: () -> Unit) = composed {
 }
 
 private fun calOffset(size: Size, scale: Float, offset: Offset): Offset {
-    if (size == Size.Unspecified) return Offset.Zero
+    if (size.isUnspecified) return Offset.Zero
     val px = size.width * (scale - 1f) / 2f
     val py = size.height * (scale - 1f) / 2f
     return Offset(offset.x.coerceIn(-px, px), offset.y.coerceIn(-py, py))

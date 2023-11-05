@@ -33,9 +33,7 @@ fun LazyGridDemo() {
                     model = images[it],
                     contentDescription = null,
                     Modifier
-                        .clickable {
-                            scope.launch { imageViewerState.onClick(it) }
-                        }
+                        .clickable { scope.launch { imageViewerState.onClick(it) } }
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f)
                         .positionTracing(it, imageViewerState),
@@ -43,6 +41,6 @@ fun LazyGridDemo() {
                 )
             }
         }
-        ImageViewer(imageViewerState, 3000)
+        ImageViewer(imageViewerState)
     }
 }

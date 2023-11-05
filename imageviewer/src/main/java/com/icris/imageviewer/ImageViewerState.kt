@@ -65,14 +65,7 @@ class PositionTracingState {
     internal fun calcScale(i: Int, fullWidth: Int): Float = visibleItems[i]?.let { it.width / fullWidth } ?: .5f
 }
 
-
 fun Modifier.positionTracing(i: Int, state: ImageViewerState): Modifier = composed {
-    DisposableEffect(state, i) {
-        onDispose {
-            state.positionTracingState.visibleItems.remove(i)
-        }
-    }
-    onGloballyPositioned {
-        state.positionTracingState.visibleItems[i] = it.boundsInRoot()
-    }
+    DisposableEffect(state, i) { onDispose { state.positionTracingState.visibleItems.remove(i) } }
+    onGloballyPositioned { state.positionTracingState.visibleItems[i] = it.boundsInRoot() }
 }

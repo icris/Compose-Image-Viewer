@@ -16,12 +16,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun Router() {
-    var selected by remember {
-        mutableIntStateOf(-1)
-    }
-    BackHandler(selected >= 0) {
-        selected = -1
-    }
+    var selected by remember { mutableIntStateOf(-1) }
+    BackHandler(selected >= 0) { selected = -1 }
 
     when (selected) {
         0 -> LazyListDemo()

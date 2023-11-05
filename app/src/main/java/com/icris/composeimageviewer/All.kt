@@ -1,6 +1,5 @@
 package com.icris.composeimageviewer
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -27,7 +26,6 @@ import com.icris.imageviewer.rememberImageViewerState
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AllDemo() {
     val scope = rememberCoroutineScope()
@@ -59,9 +57,7 @@ fun AllDemo() {
                             model = images[it],
                             contentDescription = null,
                             Modifier
-                                .clickable {
-                                    scope.launch { imageViewerState.onClick(it) }
-                                }
+                                .clickable { scope.launch { imageViewerState.onClick(it) } }
                                 .fillMaxWidth()
                                 .aspectRatio(16f / 9f)
                                 .positionTracing(it, imageViewerState),
@@ -83,9 +79,7 @@ fun AllDemo() {
                             model = images[it],
                             contentDescription = null,
                             Modifier
-                                .clickable {
-                                    scope.launch { imageViewerState.onClick(i) }
-                                }
+                                .clickable { scope.launch { imageViewerState.onClick(i) } }
                                 .fillMaxWidth()
                                 .aspectRatio(16f / 9f)
                                 .positionTracing(i, imageViewerState),
@@ -106,9 +100,7 @@ fun AllDemo() {
                             model = images[it],
                             contentDescription = null,
                             Modifier
-                                .clickable {
-                                    scope.launch { imageViewerState.onClick(i) }
-                                }
+                                .clickable { scope.launch { imageViewerState.onClick(i) } }
                                 .fillMaxWidth()
                                 .padding(4.dp)
                                 .positionTracing(i, imageViewerState),

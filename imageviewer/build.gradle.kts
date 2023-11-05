@@ -45,7 +45,7 @@ dependencies {
     api(libs.core.ktx)
     api(libs.material3)
     api(libs.activity.compose)
-    api(libs.bundles.coil)
+    api(libs.coil)
 }
 
 val GROUP_ID = "com.gitee.icris"

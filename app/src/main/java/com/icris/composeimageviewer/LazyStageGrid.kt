@@ -1,6 +1,5 @@
 package com.icris.composeimageviewer
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +16,6 @@ import com.icris.imageviewer.positionTracing
 import com.icris.imageviewer.rememberImageViewerState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyStaggeredGridDemo() {
     val scope = rememberCoroutineScope()
@@ -34,9 +32,7 @@ fun LazyStaggeredGridDemo() {
                     model = images[it],
                     contentDescription = null,
                     Modifier
-                        .clickable {
-                            scope.launch { imageViewerState.onClick(it) }
-                        }
+                        .clickable { scope.launch { imageViewerState.onClick(it) } }
                         .fillMaxWidth()
                         .positionTracing(it, imageViewerState),
                     contentScale = ContentScale.FillWidth
